@@ -1,0 +1,220 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=.75in]{geometry} 
+\usepackage{amsmath, tikz, enumitem, amsthm, amscd, amssymb, graphicx, multicol, array, mathtools, verbatim}
+\usetikzlibrary{decorations.markings}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PS}{\mathbb{P}}
+\newcommand{\AS}{\mathbb{A}}
+\newcommand{\m}{\lambda}
+\newcommand{\e}{\epsilon}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\om}{\omega}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\OK}{\mathcal{O}_K}
+\newcommand{\Nm}{\text{Nm}}
+\newcommand{\Gal}{\text{Gal}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\chr}{\text{char }}
+\newcommand{\im}{\text{im}}
+\newcommand{\Aut}{\text{Aut }}
+\newcommand{\id}{\text{id}}
+\newcommand{\Ind}{\text{Ind}}
+\newcommand{\Hom}{\text{Hom}}
+\newcommand{\Coind}{\text{Coind}}
+\newcommand{\Res}{\text{Res}}
+\newcommand{\Card}{\text{Card}}
+\newcommand{\Sym}{\text{Sym}}
+\newcommand{\Alt}{\text{Alt}}
+\newcommand{\coker}{\text{coker }}
+\newcommand{\ad}{\textnormal{ad}}
+
+%% Homology and Cohomology
+\newcommand{\Ext}{\mathbf{Ext}}
+\newcommand{\Tor}{\mathbf{Tor}}
+\newcommand{\pd}{\textnormal{pd}}
+
+% Geometry
+\usepackage[OT2,T1]{fontenc}
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
+\newcommand{\Div}{\textnormal{Div}}
+\newcommand{\Pic}{\textnormal{Pic}}
+
+%% Global Stuff
+\newcommand{\ints}{\mathcal{O}}
+\newcommand{\Ad}{\mathbb{A}}
+\newcommand{\Id}{\mathbb{I}}
+\newcommand{\Cl}{\text{Cl}}
+\newcommand{\Diff}{\mathcal{D}}
+\newcommand{\Frob}{\textnormal{Frob}}
+
+\newtheorem{remark}{Remark}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\title{Information Theory}
+\author{Tyler}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Mutual Information}
+
+$$I(X;Y) = \int_{\mathcal{Y}}\int_{\mathcal{X}}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
+
+Let $f : \R \to \R$ be a monotonically increasing, onto, continuously differentiable function. Let $X' = f(X)$.
+
+$$I(f(X);Y) = \int_{\R}\int_{\R}P_{(f(X),Y)}(f(x),y)\log\left(\frac{P_{(f(X),Y)}(f(x),y)}{P_{f(X)}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+
+
+$$\int_{\R}P_{(X',Y)}(x,y)dx = P_Y(y)$$
+$$= \int_{\R}P_{(X,Y)}(f(x),y)f'(x)dx$$
+$$= \int_{\R}P_{(f(X),Y)}(f(x),y)dx$$
+
+$$P_{(X,Y)}(f(x),y)f'(x) = P_{(f(X),Y)}(f(x),y)$$
+
+$$I(X';Y) = \int_{\R}\int_{\R}P_{(X',Y)}(x,y)\log\left(\frac{P_{(X',Y)}(x,y)}{P_{X'}(x)P_Y(y)}\right)dxdy$$
+$$= \int_{\R}\int_{\R}P_{(X',Y)}(f(x),y)\log\left(\frac{P_{(X',Y)}(f(x),y)}{P_{X'}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+$$= \int_{\R}\int_{\R}P_{(X,Y)}(f(x),y)f'(x)\log\left(\frac{P_{(X,Y)}(f(x),y)f'(x)}{P_{X}(f(x))f'(X)P_Y(y)}\right)f'(x)dxdy$$
+$$= \int_{\R}\int_{\R}P_{(X,Y)}(f(x),y)f'(x)\log\left(\frac{P_{(X,Y)}(f(x),y)}{P_{X}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+
+\newpage
+
+Note that
+$$P_X(x)dx = P_{X'}(fx)\cdot dfx = P_{X'}(fx)\cdot f'x dx$$
+and
+$$I(X;Y) = H(X) + H(Y) - H(X,Y)$$
+
+Is $H(X) - H(X,Y) = H(X') - H(X',Y)$?
+
+$$H(X) - H(X,Y)$$
+$$= -\int_{\R}P_X(x)\log P_X(x) dx + \int_{\R}\int_{\R}P_{(X,Y)}(x,y)\log P_{(X,Y)}(x,y)dxdy$$
+$$= -\int_{\R}P_{X'}(fx) f'x \log (P_{X'}(fx) f'x) dx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log (P_{(X',Y)}(fx,y)f'x)dxdy$$
+$$= -\int_{\R}P_{X'}(fx) f'x (\log P_{X'}(fx) + \log f'x) dx $$
+$$+ \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x(\log P_{(X',Y)}(fx,y) + \log f'x)dxdy$$
+
+$$= -\int_{\R}P_{X'}(fx) f'x \log P_{X'}(fx)  dx -\int_{\R}P_{X'}(fx) f'x \log f'x dx $$
+$$+ \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log P_{(X',Y)}(fx,y)dxdy + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x \log f'x dxdy$$
+
+$$= -\int_{\R}P_{X'}(fx) f'x \log P_{X'}(fx) dx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log P_{(X',Y)}(fx,y)dxdy$$
+$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x \log f'x dxdy$$
+
+$$= -\int_{\R}P_{X'}(fx) \log P_{X'}(fx) dfx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)\log P_{(X',Y)}(fx,y)dfxdy$$
+$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}\left(\int_{\R}P_{(X',Y)}(fx,y)dy\right)f'x \log f'x dx$$
+
+$$= -\int_{\R}P_{X'}(x) \log P_{X'}(x) dx + \int_{\R}\int_{\R}P_{(X',Y)}(x,y)\log P_{(X',Y)}(x,y)dxdy$$
+$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}P_{X'}(fx)f'x \log f'x dx$$
+
+$$= H(X') - H(X', Y)$$
+
+In particular,
+$$I(X;Y) = H(X) + H(Y) - H(X,Y) = H(X') + H(Y) - H(X',Y) = I(X';Y)$$
+
+\begin{center}
+\it So nice! Mutual information is invariant under invertible transformations.
+\end{center}
+
+\newpage
+
+\subsection*{Root Jensen-Shannon Divergence (rJSD)}
+
+$$JS(P||Q) =\frac{1}{2}D_{KL}(P||M) + \frac{1}{2}D_{KL}(Q||M),$$
+where $M = \frac{1}{2}(P+Q)$ and
+$$D_{KL}(P||Q) = \int P(x) \log \frac{P(x)}{Q(x)}dx$$
+
+$$P(x)dx = P(f(x))df(x) = P(f(x))f'(x) dx,$$
+so
+$$P(x) = P'(f(x))f'(x) \qquad\text{ and }\qquad Q(x) = Q'(f(x))f'(x)$$
+
+$$M(x) = \frac{1}{2}(P(x)+Q(x)) = \frac{f'(x)}{2}(P'(f(x)) + Q'(f(x)))$$
+
+$$D_{KL}(P||M) = \int P(x)\log\frac{P(x)}{M(x)}dx$$
+$$= \int P'(fx)f'x\log\frac{P'(fx)f'x}{\frac{f'x}{2}(P'(fx) + Q'(fx))}dx$$
+$$= \int P'(fx)\log\frac{P'(fx)}{\frac{1}{2}(P'(fx) + Q'(fx))}dfx$$
+$$= \int P'(x)\log\frac{P'(x)}{\frac{1}{2}(P'(x) + Q'(x))}dx$$
+$$= \int P'(x)\log\frac{P'(x)}{M'(x)}dx = D_{KL}(P'||M')$$
+
+\subsection*{Mutual Information}
+
+Because mutual information is independent with respect to continuously differentiable, bijective transformations, it's interesting to consider the effect of rotations in the $XY$ plane.
+
+We have
+$$I(X;Y) = \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy.$$
+
+$$dx = \cos \theta dx' + \sin \theta dy'$$
+$$dy = \cos \theta dy' - \sin \theta dx'$$
+$$dx \wedge dy = \cos^2\theta dx' \wedge dy' - \sin^2\theta dy' \wedge dx' = dx' \wedge dy'$$
+
+$$P_{X}(x)dx + P_{Y}(y)dy = P_{X'}(x')dx' + P_{Y'}(y')dy'$$
+$$P_{X}(x)(\cos\theta dx' + \sin\theta dy') + P_{Y}(y)(\cos\theta dy' - \sin\theta dx') = P_{X'}(x')dx' + P_{Y'}(y')dy'$$
+$$P_{X}(x)\cos\theta dx' + P_{X}(x) \sin\theta dy' + P_{Y}(y)\cos\theta dy' - P_{Y}(y) \sin\theta dx' = P_{X'}(x')dx' + P_{Y'}(y')dy'$$
+
+\section*{Gaussian}
+
+Because mutual information is invariant under invertible transformations, we can coerce $P_X$ and $P_Y$ to follow a normal distribution:
+
+$$f(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}.$$
+
+Then,
+
+$$I(X;Y) = \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
+$$= \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{\frac{1}{\sqrt{2\pi}}e^{-x^2/2}\frac{1}{\sqrt{2\pi}}e^{-y^2/2}}\right)dxdy$$
+$$= \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\log\left(\frac{2\pi P_{(X,Y)}(x,y)}{e^{-(x^2+y^2)/2}}\right)dxdy$$
+$$= \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\left(\log 2\pi + \log P_{(X,Y)}(x,y) + \frac{x^2 + y^2}{2}\right)dxdy$$
+$$= \log 2\pi + \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\left(\log P_{(X,Y)}(x,y) + \frac{x^2 + y^2}{2}\right)dxdy$$
+
+Now, if we rotate $X$ and $Y$:
+$$dx = \cos \theta dx' + \sin \theta dy'$$
+$$dy = \cos \theta dy' - \sin \theta dx'$$
+$$dx \wedge dy = dx' \wedge dy'$$
+Then,
+
+$$I(X;Y) = \log 2\pi + \int_{\mathcal{X}\times\mathcal{Y}}P_{(X,Y)}(x,y)\left(\log P_{(X,Y)}(x,y) + \frac{x^2+y^2}{2}\right)dxdy$$
+$$= \log 2\pi + \int_{\mathcal{X}'\times\mathcal{Y}'}P_{(X',Y')}(x',y')\left(\log P_{(X',Y')}(x',y') + \frac{x'^2+y'^2}{2}\right)dx'dy' = I(X';Y'),$$
+so
+\begin{center}
+{\it Mutual Information of two normally distributed variables (marginally) is invariant under rotation.}
+\end{center}
+
+\newpage
+
+\subsection*{Gaussian Shift}
+
+Let $f$ be the invertible transformation such that $P \circ f = X$, where $X$ is a normal distribution. $P$ is a distribution over $\R$.
+Then,
+
+$$\int_{-\infty}^x P(f(t))f'(t)dt = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^x e^{-t^2/2}dt$$
+$$\sqrt{2\pi} P(f(x))f'(x) = e^{-x^2/2}$$
+$$-x^2/2 = \frac{1}{2}\log 2\pi + \log P(f(x)) + \log f'(x)$$
+$$x^2 = -\log 2\pi - 2\log P(f(x)) - 2 \log f'(x)$$
+
+If $g$ is the inverse of $f$,
+$$g(x)^2 = -\log 2 \pi - 2 \log P(x) - 2 \log f'(g(x)),$$
+but since $g'(x) = \frac{1}{f'(g(x))}$ (definition of inverse and chain rule), we have
+$$g(x)^2 = \log\left(\frac{g'(x)^2}{2 \pi P(x)^2}\right).$$
+
+Also,
+$$e^{g(x)^2/2} = \frac{g'(x)}{\sqrt{2\pi}P(x)}$$
+
+$$g(x)g'(x)e^{g(x)^2/2} = \frac{1}{\sqrt{2\pi}}\cdot\frac{P(X)g''(x) - P'(x)g'(x)}{P(x)^2}$$
+$$g(x)g'(x)\frac{g'(x)}{\sqrt{2\pi}P(x)} = \frac{1}{\sqrt{2\pi}}\cdot\frac{P(x)g''(x) - P'(x)g'(x)}{P(x)^2}$$
+$$g(x)g'(x)^2 P(x) = P(x)g''(x) - P'(x)g'(x)$$
+$$[g(x)g'(x) P(x) + P'(x)]g'(x) = P(x)g''(x)$$
+$$g(x)g'(x) + \frac{P'(x)}{P(x)} = \frac{g''(x)}{g'(x)}$$
+$$g(x)g'(x) + \frac{d}{dx}\log P(x) = \frac{d}{dx}\log g'(x)$$
+
+\end{document}
