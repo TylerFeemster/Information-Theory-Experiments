@@ -1,0 +1,67 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=.75in]{geometry} 
+\usepackage{amsmath, tikz, enumitem, amsthm, amscd, amssymb, graphicx, multicol, array, mathtools, verbatim}
+\usetikzlibrary{decorations.markings}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\m}{\lambda}
+\newcommand{\e}{\epsilon}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\om}{\omega}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\chr}{\text{char }}
+\newcommand{\im}{\text{im}}
+\newcommand{\Aut}{\text{Aut }}
+\newcommand{\id}{\text{id}}
+
+\newtheorem{remark}{Remark}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\title{Gaussians}
+\author{Tyler Feemster}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+The entropy of a probability distribution $P$ over $\R$ is given by
+$$H(X) = -\int_{\R}P(x)\log P(x) dx$$ 
+
+If $X$ is the standard normal distribution, then
+$$H(X) = -\int \frac{1}{\sqrt{2\pi}}e^{-x^2/2}\log\left(\frac{1}{\sqrt{2\pi}}e^{-x^2/2}\right)dx$$
+$$= -\frac{1}{\sqrt{2\pi}}\int e^{-x^2/2}\left(-\frac{1}{2}\log 2\pi - \frac{x^2}{2}\right)dx$$
+$$= \frac{\log 2\pi}{2} + \frac{1}{2\sqrt{2\pi}}\int x^2 e^{-x^2/2}dx.$$
+
+Isolating the integral and using integration by parts, we have
+$$\int x^2 e^{-x^2/2}dx = \int x (x e^{-x^2/2})dx = -\int 1\cdot (-e^{-x^2/2})dx = \int e^{-x^2/2} dx = \sqrt{2\pi}.$$
+Thus,
+$$H(X) = \frac{1}{2}(1+\log 2\pi)$$
+
+\section*{Kernel Formula}
+
+For $n$ a non-negative integer, define 
+$$I(n) = \int_{-\infty}^{\infty}x^n e^{-x^2/2} dx.$$
+Using polar coordinates, we can obtain the popular result that
+$$I(0) = \sqrt{2\pi}.$$
+For $n$ odd, the integrand is odd, so $I(n) = 0$.
+
+Now, we can use integration by parts to obtain
+$$I(2k) = \int x^{2k} e^{-x^2/2} dx = \int x^{2k-1}(xe^{-x^2/2}) dx$$
+$$= - \int (2k-1)x^{2k-2}(-e^{-x^2/2})dx = (2k-1)\int x^{2(k-1)}e^{-x^2/2}dx = (2k-1)I(2k-2).$$
+
+By induction, we can see that
+$$I(2k) = \frac{(2k)!\sqrt{2\pi}}{2^k k!}.$$
+
+
+\end{document}

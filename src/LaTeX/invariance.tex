@@ -1,0 +1,119 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=.75in]{geometry} 
+\usepackage{amsmath, tikz, enumitem, amsthm, amscd, amssymb, graphicx, multicol, array, mathtools, verbatim}
+\usetikzlibrary{decorations.markings}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\m}{\lambda}
+\newcommand{\e}{\epsilon}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\om}{\omega}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\chr}{\text{char }}
+\newcommand{\im}{\text{im}}
+\newcommand{\Aut}{\text{Aut }}
+\newcommand{\id}{\text{id}}
+
+\newtheorem{remark}{Remark}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\title{Mutual Information and its Various Invariances}
+\author{Tyler Feemster}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+The mutual information of two continous, real-valued random variables $X$ and $Y$ is defined by
+$$I(X;Y) = \int_{\R}\int_{\R}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
+
+\section{Invertible, Differentiable Functions}
+
+Let $f : \R \to \R$ be an invertible, differentiable function, and let $X' := f(X)$.
+
+\begin{theorem}\label{MI invariance}
+    $I(X;Y) = I(X';Y)$.
+\end{theorem}
+
+\begin{proof}
+    First, note that
+    $$P_X(x)dx = P_{X'}(f(x))\cdot df(x) = P_{X'}(f(x))\cdot f'(x) dx,$$
+    and similarly,
+    $$P_{(X,Y)}(x,y)dx = P_{(X',Y)}(f(x),y)\cdot f'(x)dx.$$
+
+    Therefore, we have
+    $$I(X;Y) = \int_{\R}\int_{\R}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
+    $$= \int\int P_{(X',Y)}(f(x),y)f'(x)\log\left(\frac{P_{(X',Y)}(f(x),y)f'(x)}{P_{X'}(f(x))f'(x)P_Y(y)}\right)dxdy$$
+    $$= \int\int P_{(X',Y)}(f(x),y)\log\left(\frac{P_{(X',Y)}(f(x),y)}{P_{X'}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+    $$= \int\int P_{(X',Y)}(x',y)\log\left(\frac{P_{(X',Y)}(x',y)}{P_{X'}(x')P_Y(y)}\right)dx'dy = I(X';Y).$$
+\end{proof}
+
+\begin{center}
+\it Mutual information is invariant under invertible, continuously differentiable transformations.
+\end{center}
+
+Let $f: \R \to \R$ and $g: \R \to \R$ be invertible, continuously differentiable transformations, and 
+define $X' := f(X)$ and $Y' := g(Y)$. By symmetry and Theorem \ref{MI invariance}, we have
+$$I(X;Y) = I(X';Y) = I(X';Y').$$ 
+
+\section{Rotations}
+
+Because mutual information is independent with respect to continuously differentiable, invertible transformations, we now turn to the question of ``mixing'' $X$ and $Y$. 
+The most natural transformations that achieve this are rotations in the $XY$ plane. Rotating by $\theta$, the differentials become:
+
+$$dx = \cos \theta dx' + \sin \theta dy'$$
+$$dy = - \sin \theta dx' + \cos \theta dy' $$
+$$dx \wedge dy = \cos^2\theta dx' \wedge dy' - \sin^2\theta dy' \wedge dx' = (\cos^2\theta + \sin^2\theta)dx' \wedge dy' = dx' \wedge dy'$$
+
+\subsection{Gaussians}
+
+Because mutual information is invariant under invertible transformations, we can coerce $P_X$ and $P_Y$ to follow a standard normal distribution without affecting their mutual information. 
+So, assume
+$$P_X(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2} 
+\qquad \text{and} \qquad
+P_Y(y) = \frac{1}{\sqrt{2\pi}}e^{-y^2/2}.$$
+
+\begin{theorem}\label{MI rotations}
+    If $X$ and $Y$ are standard normal distributions and $X'$ and $Y'$ are the random variables after a rotation, $I(X;Y) = I(X';Y')$.
+\end{theorem}
+
+\begin{proof}
+We have
+$$I(X;Y) = \int\int P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
+$$= \int\int P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{\frac{1}{\sqrt{2\pi}}e^{-x^2/2}\frac{1}{\sqrt{2\pi}}e^{-y^2/2}}\right)dxdy$$
+$$= \int\int P_{(X,Y)}(x,y)\log\left(\frac{2\pi P_{(X,Y)}(x,y)}{e^{-(x^2+y^2)/2}}\right)dxdy$$
+$$= \int\int P_{(X,Y)}(x,y)\left(\log 2\pi + \log P_{(X,Y)}(x,y) + \frac{x^2 + y^2}{2}\right)dxdy$$
+$$= \log 2\pi + \int\int P_{(X,Y)}(x,y)\left(\log P_{(X,Y)}(x,y) + \frac{x^2 + y^2}{2}\right)dxdy.$$
+Now, note that under a rotation by $\theta$,
+$$dxdy = dx'dy', \qquad P_{(X,Y)}(x,y) = P_{(X',Y')}(x',y'), \text{ and }\qquad x^2 + y^2 = x'^2 + y'^2.$$
+Therefore,
+$$I(X;Y) = \log 2\pi + \int\int P_{(X,Y)}(x,y)\left(\log P_{(X,Y)}(x,y) + \frac{x^2 + y^2}{2}\right)dxdy$$
+$$=\log 2\pi + \int\int P_{(X',Y')}(x',y')\left(\log P_{(X',Y')}(x',y') + \frac{x'^2 + y'^2}{2}\right)dx'dy' = I(X';Y'),$$
+as desired.
+\end{proof}
+
+\begin{center}
+{\it Mutual Information of two normally distributed variables (marginally) is invariant under rotation.}
+\end{center}
+
+\subsection{Mutual Information}
+
+When $X$ and $Y$ are standard normal, 
+$$H(X) = H(Y) = \frac{1}{2}(1 + \log2\pi).$$ 
+Therefore, in the case when the marginal distributions of $P_{(X,Y)}$ are standard normal,
+$$I(X;Y) = H(X,Y) - H(X) - H(Y) = H(X,Y) - (1 + \log 2 \pi).$$
+
+\subsection{More General Distributions}
+
+\end{document}

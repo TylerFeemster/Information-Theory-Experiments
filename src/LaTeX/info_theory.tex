@@ -8,56 +8,19 @@
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\D}{\mathbb{D}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\F}{\mathbb{F}}
-\newcommand{\PS}{\mathbb{P}}
-\newcommand{\AS}{\mathbb{A}}
 \newcommand{\m}{\lambda}
 \newcommand{\e}{\epsilon}
 \newcommand{\al}{\alpha}
 \newcommand{\be}{\beta}
 \newcommand{\om}{\omega}
-\newcommand{\T}{\mathcal{T}}
-\newcommand{\OK}{\mathcal{O}_K}
-\newcommand{\Nm}{\text{Nm}}
-\newcommand{\Gal}{\text{Gal}}
-\newcommand{\Tr}{\text{Tr}}
 \newcommand{\GL}{\text{GL}}
 \newcommand{\chr}{\text{char }}
 \newcommand{\im}{\text{im}}
 \newcommand{\Aut}{\text{Aut }}
 \newcommand{\id}{\text{id}}
-\newcommand{\Ind}{\text{Ind}}
-\newcommand{\Hom}{\text{Hom}}
-\newcommand{\Coind}{\text{Coind}}
-\newcommand{\Res}{\text{Res}}
-\newcommand{\Card}{\text{Card}}
-\newcommand{\Sym}{\text{Sym}}
-\newcommand{\Alt}{\text{Alt}}
-\newcommand{\coker}{\text{coker }}
-\newcommand{\ad}{\textnormal{ad}}
-
-%% Homology and Cohomology
-\newcommand{\Ext}{\mathbf{Ext}}
-\newcommand{\Tor}{\mathbf{Tor}}
-\newcommand{\pd}{\textnormal{pd}}
-
-% Geometry
-\usepackage[OT2,T1]{fontenc}
-\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
-\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
-\newcommand{\Div}{\textnormal{Div}}
-\newcommand{\Pic}{\textnormal{Pic}}
-
-%% Global Stuff
-\newcommand{\ints}{\mathcal{O}}
-\newcommand{\Ad}{\mathbb{A}}
-\newcommand{\Id}{\mathbb{I}}
-\newcommand{\Cl}{\text{Cl}}
-\newcommand{\Diff}{\mathcal{D}}
-\newcommand{\Frob}{\textnormal{Frob}}
 
 \newtheorem{remark}{Remark}
 \newtheorem{proposition}{Proposition}
@@ -65,67 +28,56 @@
 \newtheorem{lemma}{Lemma}
 
 \title{Information Theory}
-\author{Tyler}
+\author{Tyler Feemster}
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section*{Mutual Information}
-
+The mutual information of two continous, real-valued random variables $X$ and $Y$ is defined by
 $$I(X;Y) = \int_{\mathcal{Y}}\int_{\mathcal{X}}P_{(X,Y)}(x,y)\log\left(\frac{P_{(X,Y)}(x,y)}{P_X(x)P_Y(y)}\right)dxdy$$
 
-Let $f : \R \to \R$ be a monotonically increasing, onto, continuously differentiable function. Let $X' = f(X)$.
+\section*{Invariance Properties}
 
-$$I(f(X);Y) = \int_{\R}\int_{\R}P_{(f(X),Y)}(f(x),y)\log\left(\frac{P_{(f(X),Y)}(f(x),y)}{P_{f(X)}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+Let $f : \R \to \R$ be an invertible, differentiable function, and let $X' := f(X)$.
 
+\begin{lemma}\label{entropy difference}
+$H(X) - H(X,Y) = H(X') - H(X',Y)$.
+\end{lemma}
+\begin{proof}
+    We start by expanding the left-hand side and substituting $x \mapsto f(x)$. First, note that
+$$P_X(x)dx = P_{X'}(f(x))\cdot df(x) = P_{X'}(f(x))\cdot f'(x) dx.$$
+Then, 
+$$H(X) - H(X,Y) = -\int_{\R} P_X(x)\log P_X(x) dx + \int_{\R}\int_{\R}P_{(X,Y)}(x,y)\log P_{(X,Y)}(x,y)dxdy$$
+$$= -\int P_{X'}(f(x)) f'(x) \log (P_{X'}(f(x)) f'(x)) dx$$ 
+$$+ \int \int P_{(X',Y)}(f(x),y)f'(x)\log (P_{(X',Y)}(f(x),y)f'(x))dxdy$$
 
-$$\int_{\R}P_{(X',Y)}(x,y)dx = P_Y(y)$$
-$$= \int_{\R}P_{(X,Y)}(f(x),y)f'(x)dx$$
-$$= \int_{\R}P_{(f(X),Y)}(f(x),y)dx$$
+$$= -\int P_{X'}(f(x)) \log P_{X'}(f(x)) f'(x) dx -\int P_{X'}(f(x)) f'(x) \log f'(x) dx $$
+$$+ \int \int P_{(X',Y)}(f(x),y)\log P_{(X',Y)}(f(x),y)f'(x)dxdy + \int \int P_{(X',Y)}(f(x),y)f'(x) \log f'(x) dxdy$$
 
-$$P_{(X,Y)}(f(x),y)f'(x) = P_{(f(X),Y)}(f(x),y)$$
+$$= -\int P_{X'}(x') \log P_{X'}(x') dx' + \int \int P_{(X',Y)}(x',y)\log P_{(X',Y)}(x',y)dx'dy$$
+$$- \int P_{X'}(f(x)) f'(x) \log f'(x) dx + \int \int P_{(X',Y)}(f(x),y)f'(x) \log f'(x) dxdy$$
 
-$$I(X';Y) = \int_{\R}\int_{\R}P_{(X',Y)}(x,y)\log\left(\frac{P_{(X',Y)}(x,y)}{P_{X'}(x)P_Y(y)}\right)dxdy$$
-$$= \int_{\R}\int_{\R}P_{(X',Y)}(f(x),y)\log\left(\frac{P_{(X',Y)}(f(x),y)}{P_{X'}(f(x))P_Y(y)}\right)f'(x)dxdy$$
-$$= \int_{\R}\int_{\R}P_{(X,Y)}(f(x),y)f'(x)\log\left(\frac{P_{(X,Y)}(f(x),y)f'(x)}{P_{X}(f(x))f'(X)P_Y(y)}\right)f'(x)dxdy$$
-$$= \int_{\R}\int_{\R}P_{(X,Y)}(f(x),y)f'(x)\log\left(\frac{P_{(X,Y)}(f(x),y)}{P_{X}(f(x))P_Y(y)}\right)f'(x)dxdy$$
+$$= H(X') - H(X',Y) - \int P_{X'}(f(x)) f'(x) \log f'(x) dx + \int \int P_{(X',Y)}(f(x),y)f'(x) \log f'(x) dxdy.$$
 
-\newpage
+We complete the lemma by observing
+$$\int \int P_{(X',Y)}(f(x),y)f'(x) \log f'(x) dxdy = \int\left(\int P_{(X',Y)}(f(x),y)dy\right) f'(x) \log f'(x) dx$$
+$$= \int P_{X'}(f(x)) f'(x) \log f'(x) dx.$$
+\end{proof}
 
-Note that
-$$P_X(x)dx = P_{X'}(fx)\cdot dfx = P_{X'}(fx)\cdot f'x dx$$
-and
-$$I(X;Y) = H(X) + H(Y) - H(X,Y)$$
+\begin{theorem}\label{MI invariance}
+$I(X';Y) = I(X;Y)$.
+\end{theorem}
 
-Is $H(X) - H(X,Y) = H(X') - H(X',Y)$?
-
-$$H(X) - H(X,Y)$$
-$$= -\int_{\R}P_X(x)\log P_X(x) dx + \int_{\R}\int_{\R}P_{(X,Y)}(x,y)\log P_{(X,Y)}(x,y)dxdy$$
-$$= -\int_{\R}P_{X'}(fx) f'x \log (P_{X'}(fx) f'x) dx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log (P_{(X',Y)}(fx,y)f'x)dxdy$$
-$$= -\int_{\R}P_{X'}(fx) f'x (\log P_{X'}(fx) + \log f'x) dx $$
-$$+ \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x(\log P_{(X',Y)}(fx,y) + \log f'x)dxdy$$
-
-$$= -\int_{\R}P_{X'}(fx) f'x \log P_{X'}(fx)  dx -\int_{\R}P_{X'}(fx) f'x \log f'x dx $$
-$$+ \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log P_{(X',Y)}(fx,y)dxdy + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x \log f'x dxdy$$
-
-$$= -\int_{\R}P_{X'}(fx) f'x \log P_{X'}(fx) dx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x\log P_{(X',Y)}(fx,y)dxdy$$
-$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)f'x \log f'x dxdy$$
-
-$$= -\int_{\R}P_{X'}(fx) \log P_{X'}(fx) dfx + \int_{\R}\int_{\R}P_{(X',Y)}(fx,y)\log P_{(X',Y)}(fx,y)dfxdy$$
-$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}\left(\int_{\R}P_{(X',Y)}(fx,y)dy\right)f'x \log f'x dx$$
-
-$$= -\int_{\R}P_{X'}(x) \log P_{X'}(x) dx + \int_{\R}\int_{\R}P_{(X',Y)}(x,y)\log P_{(X',Y)}(x,y)dxdy$$
-$$-\int_{\R}P_{X'}(fx) f'x \log f'x dx  + \int_{\R}P_{X'}(fx)f'x \log f'x dx$$
-
-$$= H(X') - H(X', Y)$$
-
-In particular,
-$$I(X;Y) = H(X) + H(Y) - H(X,Y) = H(X') + H(Y) - H(X',Y) = I(X';Y)$$
+\begin{proof}
+    This follows immediately from the identity
+    $$I(X;Y) = H(X) + H(Y) - H(X,Y)$$
+    and Lemma \ref{entropy difference}.
+\end{proof}
 
 \begin{center}
-\it So nice! Mutual information is invariant under invertible transformations.
+\it Mutual information is invariant under invertible, continuously differentiable transformations.
 \end{center}
 
 \newpage
@@ -143,8 +95,8 @@ $$P(x) = P'(f(x))f'(x) \qquad\text{ and }\qquad Q(x) = Q'(f(x))f'(x)$$
 $$M(x) = \frac{1}{2}(P(x)+Q(x)) = \frac{f'(x)}{2}(P'(f(x)) + Q'(f(x)))$$
 
 $$D_{KL}(P||M) = \int P(x)\log\frac{P(x)}{M(x)}dx$$
-$$= \int P'(fx)f'x\log\frac{P'(fx)f'x}{\frac{f'x}{2}(P'(fx) + Q'(fx))}dx$$
-$$= \int P'(fx)\log\frac{P'(fx)}{\frac{1}{2}(P'(fx) + Q'(fx))}dfx$$
+$$= \int P'(f(x))f'(x)\log\frac{P'(f(x))f'(x)}{\frac{f'(x)}{2}(P'(f(x)) + Q'(f(x)))}dx$$
+$$= \int P'(f(x))\log\frac{P'(f(x))}{\frac{1}{2}(P'(f(x)) + Q'(f(x)))}df(x)$$
 $$= \int P'(x)\log\frac{P'(x)}{\frac{1}{2}(P'(x) + Q'(x))}dx$$
 $$= \int P'(x)\log\frac{P'(x)}{M'(x)}dx = D_{KL}(P'||M')$$
 

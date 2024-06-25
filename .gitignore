@@ -3,3 +3,7 @@
 *.fls
 *.log
 *.synctex.gz
+Python*
+
+*.venv*
+data/*
